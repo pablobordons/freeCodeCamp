@@ -27,7 +27,8 @@ function translate(str) {
     if(index == 0){end="way";}  //started with a vowel (the first vowel at 0 index)
     else{end = "ay";}           //started with consonant
   
-  
+ 
+ 
   // concat the original array with the first "index" elements. join it into a string and add the end.
 	return arr.concat(arr.splice(0,index)).join("")+end;
 
