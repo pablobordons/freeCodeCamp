@@ -1,0 +1,45 @@
+.col1{
+
+	border-radius: 5px;
+	background-color: #EEEEEE;
+}
+
+.thumbnail{
+	margin-right:7%;
+	margin-left:7%;
+}
+
+.quote{
+	font-size: 20px;
+	font-weight: normal;
+	margin-left:5%;
+	margin-right: 5%;
+}
+
+.quote-reference{
+	color: #777777;
+	font-size: 15px;
+	font-style: italic;
+	margin-bottom: 5%;
+}
+
+.reference{
+	font-size: 30px;
+}
+
+.authors{
+	text-align: center;
+}
+h3{
+	text-align: center;
+	font-style: italic;
+}
+
+h1{
+	text-align: center;
+}
+
+
+span{
+	font-weight: bold;
+}
