@@ -1,0 +1,84 @@
+body{
+	background-color: #43AE5B;
+	color: #43AE5B;
+}
+
+.item{
+	margin-top: 30%;
+	min-width: 300px;
+	min-height: 200px;
+}
+
+
+.window{
+	background-color: white;
+	width: 100%;
+	min-height: 200px;
+	border-radius: 3px;
+	padding: 28px 50px 40px 50px;
+	overflow: hidden;
+}
+
+blockquote{
+	border:0px;
+	padding: 0px;
+	margin-bottom: 30px;
+}
+
+.white-text{
+	color:white;
+	font-weight: 100;
+}
+
+#quote-body{
+	font-size: 27px;
+	font-weight: 400;
+}
+
+#quote-cite{
+	color: #43AE5B;
+	font-size: 17px;
+	font-weight: 200;
+	text-align: right;
+}
+
+
+a,
+a:hover,
+a:visited,
+a:link,
+a:active{
+	color:white;
+	text-decoration: none;
+	font-weight: 400;
+}
+
+.btn-left{
+	float: left;
+	background-color: #43AE5B;
+	color: white;
+	margin-right:7px;
+	font-size: 20px;
+	width: 40px;
+	height: 40px;
+}
+.btn-right{
+	float: right;
+	background-color: #43AE5B;
+	color: white;
+	padding:8px 15px 7px 15px;
+}
+
+
+button{
+	padding-left:-2px;
+	padding-top: 5px;
+	border:none;
+	border-radius: 5px;
+}
+button:focus{
+	outline: 0;
+}
+button:hover{
+	opacity: 0.8;
+}
