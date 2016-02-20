@@ -1,0 +1,22 @@
+body{
+	background-color: black;
+	color: white;
+}
+
+.container{
+	/*background-color: white;*/
+}
+
+.row{
+	/*background-color: yellow;*/
+}
+
+.col-sm-12{
+	background-color: gray;
+	height: 400px;
+}
+
+.item{	
+	height: 100%;
+	width:100%;
+}
