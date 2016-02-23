@@ -20,22 +20,31 @@
 		<title>Weather app</title>
 
 	<!-- include bootstrap css -->
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
 		<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 	</head>
 	<body>
+
 
 		<div class="container">
 			<div class="row text-center">
 				<div class="col-sm-12">
 					
 					<div class="item">
-						<h1>Free Code Camp</h1>
-						<h1>Weather App</h1>
-						<p>Longitud: <span id="longitud"></span></p>
-						<p>Latitud: <span id="latitud"></span></p>
+						<div class="item-header">
+							<h1>Free Code Camp</h1>
+							<h1>Weather App</h1>
+						</div>
+						<div class="item-content">
+							<p><span id="city">Loading ...</span> <span id="country"></span></p>
+							<p><span id="temperature">Loading...</span> <span onclick="changeTempUnits() "id="temp-units" title="Convert to Farenheit">ºC</span></p>
+							<p><span id="weather">Loading...</span></p>
+							<p><img id="weather-icon" src=""></img></p>
+						</div>
+						<div class="item-reference">
+							<h5>coded by <a href="http://www.freecodecamp.com/pboest" title="pboest on freecodecamp">pboest</a></h5>
+							<h6>powered by <a href="http://openweathermap.org/" title="openweathermap.org">openweathermap</a></h6>
+						</div>
 					</div>
 
 				</div>
@@ -44,11 +53,6 @@
 
 
 
-
-
-	<!-- include bootstrap and jquery (needed for bootstrap)-->
-		<script src="js/jquery-2.1.4.min.js"></script>
 		<script src="js/script.js"></script>
-		<script src="js/bootstrap.js"></script>
 	</body>
 </html>
