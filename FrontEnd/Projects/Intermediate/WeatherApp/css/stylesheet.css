@@ -12,11 +12,49 @@ body{
 }
 
 .col-sm-12{
-	background-color: gray;
+	/*background-color: gray;*/
 	height: 400px;
 }
 
 .item{	
 	height: 100%;
 	width:100%;
+}
+
+h1{
+  font-size:50px;
+}
+
+.item-header{
+  margin:50px;
+}
+
+.item-content p{
+  font-size: 20px;
+  margin: 25px;
+}
+
+.item-reference{
+  margin-top:50px;
+}
+
+#temp-units{
+  color:#3E7ABA;
+  cursor: pointer;
+}
+#temp-units:hover{
+  color:#2A5276;
+}
+
+#weather{
+  font-size:30px;
+}
+
+a,
+a:hover,
+a:visited,
+a:link,
+a:active{
+	text-decoration: none;
+	font-weight: 400;
 }
