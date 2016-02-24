@@ -1,0 +1,71 @@
+body{
+	background-color: black;
+	color: white;
+}
+
+.container{
+	/*background-color: white;*/
+}
+
+.square1{
+	height: 100px;
+	background-color: black;
+	border-style: white;
+}
+.square2{
+	height: 100px;
+	background-color: white;
+	border-style: white;
+}
+
+
+.row{
+	background-color: yellow;
+}
+
+.col-sm-12{
+	background-color: gray;
+	/*height: 400px;*/
+}
+
+.item{	
+	border-color: white;
+	width:100%;
+	margin-top: 100px;
+}
+
+#reference{
+  font-size: 20px;
+  margin-top: 40%;
+}
+
+#navigator{
+	height: 100px;
+	border-color: white;
+	border-style: solid;
+	margin-top: 20%;
+
+	position: fixed;
+    left: 15px;
+    right: 5px;
+    width: 100%;
+    overflow-y: auto;
+    z-index: 9999;
+}
+
+a,
+a:hover,
+a:visited,
+a:link,
+a:active{
+	text-decoration: none;
+	font-weight: 400;
+}
+
+li{	
+	
+	border-color: white;
+	border-style: solid;
+	/*background-color: white;*/
+	height: 20px;
+}
