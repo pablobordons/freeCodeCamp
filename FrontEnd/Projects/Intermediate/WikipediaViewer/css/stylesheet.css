@@ -1,37 +1,39 @@
 body{
-	background-color: black;
-	color: white;
-}
-
-.container{
-	/*background-color: white;*/
-}
-
-.square1{
-	height: 100px;
-	background-color: black;
-	border-style: white;
-}
-.square2{
-	height: 100px;
 	background-color: white;
-	border-style: white;
+	/*color: white;*/
 }
 
+/*modules empty*/
+	.container{
+		/*background-color: white;*/
+	}
 
-.row{
-	background-color: yellow;
-}
+	.square1{
+		/*height: 100px;*/
+		/*background-color: white;*/
+		/*border-style: white;*/
+	}
+	.square2{
+		/*height: 100px;*/
+		/*background-color: white;
+		border-style: white;*/
+	}
 
-.col-sm-12{
-	background-color: gray;
-	/*height: 400px;*/
-}
+
+	/*.row{
+		background-color: white;
+	}*/
+
+	.col-sm-12{
+		/*background-color: gray;*/
+		/*height: 400px;*/
+	}
 
 .item{	
 	border-color: white;
 	width:100%;
 	margin-top: 100px;
+	margin-bottom: 20px;
 }
 
 #reference{
@@ -40,11 +42,12 @@ body{
 }
 
 #navigator{
-	height: 100px;
-	border-color: white;
-	border-style: solid;
+	height: 60px;
+	/*border-color: white;
+	border-style: solid;*/
 	margin-top: 20%;
-
+	background-color: white;
+	padding-top: 10px;
 	position: fixed;
     left: 15px;
     right: 5px;
@@ -63,9 +66,25 @@ a:active{
 }
 
 li{	
-	
-	border-color: white;
-	border-style: solid;
-	/*background-color: white;*/
-	height: 20px;
+	list-style-type: none;
+	padding:20px;
+	color: black;
 }
+li:hover{
+	background-color: #D0D0D0;
+}
+
+input[type="text"] {
+  position: relative;
+  top: 2px;
+  right: 10px;
+  font-size: 19px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  max-width: 210px;
+}
+input[type="text"]:focus {
+  outline: none;
+}
+
