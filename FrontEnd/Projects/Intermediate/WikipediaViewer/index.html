@@ -31,14 +31,21 @@
 		<div class="container">
 
 			<div class="row text-center" id="navigator">
-				<div class="col-xs-2 col-xs-offset-0 col-sm-1 col-sm-offset-2 square2">
+				<div class="col-xs-1 col-xs-offset-0 col-sm-1 col-sm-offset-2">
 					
 				</div>
-				<div class="col-xs-8 col-sm-6 square1">
+				<div class="col-xs-10 col-sm-6">
+
 					<form class="form-search">
-						<input type="text" class="input-medium search-query"></input>
+
+						<input autocomplete="off" type="text" placeholder="Search in Wikipedia" id="search-input"></input>
 						<button type="submit" class="btn"><i class="fa fa-search"></i></button>
+						<button type="button" class="btn" id="random-button">
+							<a href="http://en.wikipedia.org/wiki/Special:Random" target='_blank'><i class="fa fa-wikipedia-w"></i></a>
+						</button>
+
 					</form>
+
 				</div>
 				<div class="col-xs-2 col-sm-1 square2">
 					
@@ -60,20 +67,6 @@
 				</div>
 			</div>
 		</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
