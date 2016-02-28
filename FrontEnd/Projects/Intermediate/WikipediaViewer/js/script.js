@@ -1,21 +1,5 @@
+// Obtaining the word to search:
 
-
-	// PSEUDOCODE:
-
-	/*
-
-	1: obtain the word
-	*: request the json
-	*: move up the navigator?
-	*: clean the li
-	*: push li with result
-	
-
-	*/
-
-
-
-// Obtaining the word
 	var initialState = true;
 
 	var searchInput = document.getElementById("search-input");
@@ -41,10 +25,8 @@
 
 	}
 
-// adding the search to the page:
+// adding the search result to the page:
 	
-
-
 	function addResults(results){
 
 		// results = [ Object, Object ...];
@@ -65,7 +47,9 @@
 			cleanUp();
 		}
 
-		addUl(results);
+		if(results.length) addUl(results);
+		else showError();
+		
 
 	}
 
@@ -88,23 +72,29 @@
 
 		for(var object in results){
 
-			var title = "<p>"+results[object].title+"</p>";
+			var wikiUrl = "https://en.wikipedia.org/wiki/" + results[object].title;
+
+
+			var title = "<p><h4>"+results[object].title+"</h4></p>";
 			var snippet = "<p>"+results[object].snippet+"</p>";
 
 			var div = "<div>"+title+snippet+"</div>"
-			$(".item").append("<li>"+div+"</li>");
+			$(".item").append("<a target='_blank' href='"+wikiUrl+"' class='li-link'><li>"+div+"</li></a>");
 		}
 
-		$(".item").append("</ul>");
+		$(".item").append("</ul><hr>");
 
 
 	}
 
+	function showError(){
+		var sp = "<br><br><br><br><br>"
+		$(".item").append(sp+"<h1>Sorry, no results were found.</h1>"+sp);
+
+	}
 
 // adding random page:
 
-	function randomPage(event){
-		event.preventDefault();
-
-		
-	}
+	//function randomPage(event){
+		//event.preventDefault();
+	//}
