@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>		
+
+	<!-- META INSTRUCTIONS -->
+		<!-- website containing unicode character set (superset of ASCII) -->
+		<meta charset="utf-8">
+
+		<!-- prevent IE from running in compatibility mode (causing CSS to not work)-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<!-- make the site to use all the space in the browser window and scale to 1 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+	
+
+	<!-- TITLE -->
+
+		<title>Wikipedia viewer</title>
+
+	<!-- include bootstrap css -->
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+		<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+	</head>
+	<body>
+
+
+		<div class="container">
+
+			<div class="row text-center" id="navigator">
+				<div class="col-xs-1 col-xs-offset-0 col-sm-1 col-sm-offset-2">
+					
+				</div>
+				<div class="col-xs-10 col-sm-6">
+
+					<form class="form-search">
+
+						<input autocomplete="off" type="text" placeholder="Search in Wikipedia" id="search-input"></input>
+						<button type="submit" class="btn"><i class="fa fa-search"></i></button>
+						<button type="button" class="btn" id="random-button">
+							<a href="http://en.wikipedia.org/wiki/Special:Random" target='_blank'><i class="fa fa-wikipedia-w"></i></a>
+						</button>
+
+					</form>
+
+				</div>
+				<div class="col-xs-2 col-sm-1 square2">
+					
+				</div>
+			</div>
+
+			<div class="row text-center">
+				<div class="col-sm-12">
+					<div class="item">
+
+					</div>
+				</div>
+			</div>
+			<div class="row text-center"  id="reference">
+				<div class="col-sm-12">
+					<div>
+						<h5>coded by <a href="http://www.freecodecamp.com/pboest" title="pboest on freecodecamp">pboest</a></h5>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- include bootstrap and jquery (needed for bootstrap)-->
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/script.js"></script>
+		<script src="js/bootstrap.js"></script>
+	</body>
+</html>
