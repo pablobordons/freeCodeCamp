@@ -6,13 +6,11 @@ body{
 	background-color: #6441A5;
 	text-align: center;
 	padding-top: 8%;
-	margin-top: 5%;
-
-
+	margin-top: 7%;
+	margin-bottom: 1%;
 	border-style: solid;
 	border-color: #4D358F;
 	border-radius: 15px;
-
 	width: 100%;
 
 }
@@ -22,30 +20,22 @@ body{
 }
 
 .item-body{
-	/*height: 100px;*/
-	/*background-color: white;*/
-	/*height: 400px;*/
 	margin-right: 7%;
 	margin-left: 7%;
-	margin-top: 5%;
-
-/*	border-style: solid;
-	border-color: black;*/
-
-	/*padding: 0px;*/
-
+	margin-top: 10%;
 }
 
 .item-body-buttons{
 	width: 100%;
-	background-color: gray;
-	margin-bottom: 4%;
+	/*background-color: gray;*/
+	margin-bottom: 7%;
+	color: white;
+	font-weight: bold;
+	font-size: 10px;
 }
 
-.item-body-list{
-/*
-	width: 100%;
-	background-color: blue;*/
+.btn{
+	margin-bottom: 5px;
 }
 
 ul{
@@ -53,47 +43,32 @@ ul{
 	margin:0px;
 }
 
-li{
+.channel-element{
 	display: inline-block;
 	width: 100%;
 	list-style-type: none;
 	background-color: #FFFFFF;
 	border-radius: 10px;
-	/*min-height: 100px;*/
 	margin-bottom: 7%;
-	/*height: 10px;*/
-	/*border:1px solid black;*/
 }
 
-li:hover{
-	background-color:#CDC2E7;
-}
 
 li img{
-	width: 70%;
-	max-width: 80px;
 	height: width;
-	padding: 10%;
-	background-color: black;
+	background-color: blue;
 	border: 2px solid black;
-	border-radius: 100px;
+	border-radius: 100%;
 	margin: 10%;
-	/*margin-top:10%;*/
-
 }
 .channel-text{
 	text-align: justify;
 	padding-right: 6%;
 	padding-top: 1.5%;
 	padding-left: 1.5%;
-	/*padding-bottom: 3%;*/
-	/*border:2px solid red;*/
-}
-.channel-text p{
 	margin-bottom: 3%;
 }
+
 .channel-img{
-	/*border:2px solid red;*/
 	padding: 0px;
 }
 
@@ -105,9 +80,32 @@ p{
 	margin:0px;
 }
 
-.imButton{
-	cursor: pointer;	
-}
+
 .imButton:hover{
 	background-color: black;
+}
+.button-element{
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+
+}
+
+.online{
+	background-color: #B7FCB6;
+}
+.online:hover{
+	background-color: #A5ED97;
+}
+.Offline{
+	background-color: white;
+}
+.Offline:hover{
+	background-color: #EEE9F8;
+}
+.no-exist{
+	background-color: #F3BFC0;
+}
+.no-exist:hover{
+	background-color: #DFA9AA;
 }
