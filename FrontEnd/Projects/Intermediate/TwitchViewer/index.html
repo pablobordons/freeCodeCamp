@@ -17,12 +17,11 @@
 
 	<!-- TITLE -->
 
-		<title>Wikipedia viewer</title>
+		<title>Twitch viewer</title>
 
 	<!-- include bootstrap css -->
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 	</head>
 	<body>
@@ -35,51 +34,52 @@
 							<img src="img/twitch_logo_purple.jpg">
 						</div>
 						<div class="item-body">
-							<div class="item-body-buttons imButton">
-								<p>item body buttons</p>
+							<div class="item-body-buttons">
+								<ul>
+									<li class="button-element">
+										<p><button class="btn" id="online-btn"><i class="fa fa-video-camera"></i></button></p>
+										Online
+									</li>
+									<li class="button-element">
+										<p><button class="btn" id="offline-btn"><i class="fa fa-bed"></i></button></p> 
+										Offline
+									</li>
+									<li class="button-element">
+										<p><button class="btn" id="all-btn"><i class="fa fa-circle"></i></button></p> 
+										All
+									</li>
+								</ul>
+								<!-- <button class="btn"><i class="fa fa-video-camera"></i></button> Online
+								<button class="btn"><i class="fa fa-bed"></i></button> Offline
+								<button class="btn"><i class="fa fa-circle"></i></button> All -->
+
 							</div>
 							<div class="item-body-list">
-								<ul>
-									<li>
+								<ul id="channel-list" class="channel-list">
+									<li class="channel-element">
 										<div class="col-xs-3 channel-img">
-											<img src="img/icon.png">
+											<img src="img/error.png">
 										</div>
 										<div class="col-xs-9 channel-text">
-											<p>Name of the channel</p>
-											<p>Description of the channel this is such a cool place, please, visit us now! hehehe yes, right now, we're doing so many things in here! come join us.</p>
+											<p class="text-center">Loading....</p>
 										</div>
 									</li>
-									<li>
-										<div class="col-xs-3 channel-img">
-											<img src="img/icon.png">
-										</div>
-										<div class="col-xs-9 channel-text">
-											<p>Name of the channel</p>
-											<p>Description of the channel</p>
-										</div>
-									</li>
-									<li>
-										<div class="col-xs-3 channel-img">
-											<img src="img/icon.png">
-										</div>
-										<div class="col-xs-9 channel-text">
-											<p>Name of the channel</p>
-											<p>Description of the channel this is such a cool place, please, visit us now!</p>
-										</div>
-									</li>
+
 								</ul>
 							</div>
 						</div>
 						
 					</div>
+					<h5>coded by <a href="http://www.freecodecamp.com/pboest" title="pboest on freecodecamp">pboest</a></h5>
+					
+					<br>
 				</div>
 			</div>
 		</div>
 
 
-	<!-- include bootstrap and jquery (needed for bootstrap)-->
-		<script src="js/jquery-2.1.4.min.js"></script>
+	<!-- include jquery-->
+		<script src="https://code.jquery.com/jquery-2.2.1.js"></script>
 		<script src="js/script.js"></script>
-		<script src="js/bootstrap.js"></script>
 	</body>
 </html>
