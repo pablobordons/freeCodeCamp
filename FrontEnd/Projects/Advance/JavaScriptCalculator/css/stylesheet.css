@@ -11,12 +11,19 @@
 
 }
 
+.header-area{
+	/*border: 1px solid black;*/
+	width: 100%;
+	height: 14%;
+}
+
+
 .screen-area{
 	border: 1px solid black;
 	width: 80%;
 	height: 12%;
 	margin: 0 auto;	
-	margin-top: 20%;
+	/*margin-top: 20%;*/
 	margin-bottom: 15%;
 	background-color: #A7FDFF;
 	border-radius: 4px;
@@ -25,17 +32,28 @@
 
 .screen-shadow{
 	width: 100%;
-	height: 3px;
+	height: 18px;
+
 	/*background-color: #90DBDD; */
 }
 
 .screen{
 	float:right;
 	margin-right: 10px;
-	margin-top: 10px;
+	margin-top: -5px;
 	font-size: 25px;
 
 }
+
+.ans-message{
+	padding-top: 2px;
+	font-size: 11px;
+	margin-left: 6px;
+	color:#5A8484;
+}
+
+
+
 .keys-area{
 	/*border: 1px solid black;*/
 	width: 80%;
@@ -73,7 +91,7 @@
 
 .btn-small{
 	font-size: 15px;
-	padding-top: 8px;
+	padding-top: 9px;
 }
 
 .btn-big{
@@ -85,6 +103,13 @@
 	font-size: 30px;
 	padding-top: 0px;
 }
+
+#btn-equal span{ 
+	font-size: 40px;
+	position:relative;
+    top:-13px;
+}
+
 
 .fa-heart{
 	color:red;
