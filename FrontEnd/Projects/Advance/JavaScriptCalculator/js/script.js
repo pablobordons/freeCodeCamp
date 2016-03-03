@@ -360,6 +360,7 @@ function pushEqual(){
 		// replace A and x
 		onScreen = onScreen.replace(/A/g,calculatorState.ansValue);
 		onScreen = onScreen.replace(/x/g,"*");
+		onScreen = onScreen.replace(/--/g,"+");
 
 		var result = eval(onScreen);
 
@@ -406,6 +407,7 @@ function pushDel(){
 			calculatorState.setOpTrue();
 			break;
 		case "A":
+			calculatorState.setNumTrue();
 			calculatorState["A"] = true;
 			break;
 	}
