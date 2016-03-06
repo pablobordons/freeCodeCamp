@@ -184,11 +184,8 @@ body{
 
 
 .btn:hover{
-
 	background-color: #9D3124;
 	color:black;
-
-
 }
 
 .work-state{
@@ -201,3 +198,16 @@ body{
 .break-state{
 
 }
+
+.btn-off{
+	color:#41140F;
+	background-color: #F66340;
+}
+
+.btn-off:hover{
+	cursor: default;
+	background-color: #F66340;
+}
+
+.btn-on{}
+.btn-on:hover{}
