@@ -13,11 +13,37 @@
 
 var engine = {
 
-	player : "cross",
+	// player : "cross",
 
-	board : [[0,0,0],[0,0,0],[0,0,0]],
+	// board : [[0,0,0],[0,0,0],[0,0,0]],
 
+	// emptyMoves : [],
 
+	start : function(player){
+
+		engine.setPlayer(player);
+		display.loadBoard();
+		engine.getEmptyMoves();
+
+	},
+
+	getEmptyMoves : function(){
+
+		var emptyMoves = [];
+
+		for(var row = 0; row < 3; row++){
+
+			for(var col = 0; col<3; col++){
+
+				if(!engine.board[row][col]){
+					emptyMoves.push([row,col]);
+				}
+			}
+		}
+
+		engine.emptyMoves = emptyMoves;
+
+	},
 
 	win : function (board) {
 
@@ -81,7 +107,7 @@ var engine = {
 		//evaluate a row
 		evaluateRow : function(arr){
 		   //if not all are the same:
-		   if(!allEqual(arr)) return 0;
+		   if(!engine.tools.allEqual(arr)) return 0;
 		   else{
 		      // 1 wins
 		      if(arr[0]==1) return 1;
@@ -108,6 +134,13 @@ var engine = {
 		  return false;
 		}
 
+	},
+
+	setPlayer : function(player){
+
+		engine.player = player;
+
+		ia.player = player == "cross" ? "circle" : "cross";
 	}
 
 };
@@ -142,7 +175,10 @@ var display = {
 
 		cross : '<div class="move move-cross"><i class="fa fa-times"></i></div>',
 
-		circle : '<div class="move move-circle"><i class="fa fa-circle-o"></i></div>'
+		circle : '<div class="move move-circle"><i class="fa fa-circle-o"></i></div>',
+
+		empty : '<div class="move move-empty"></div>'
+
 	},
 
 	printBoard : function(){
@@ -175,15 +211,15 @@ var display = {
 
 		var newBoard = [];
 
-		for(var row in engine.board){
+		for(var row = 0; row < 3 ; row++){
 
 			var newRow = [];
 
-			for(var col in engine.board[row]){
+			for(var col = 0; col < 3 ; col++){
 
 				var move = display.board[row][col].children();
 
-				var newElement 
+				var newElement; 
 
 				if(move.hasClass("move-empty")){
 					newElement = 0;
@@ -204,14 +240,36 @@ var display = {
 
 			newBoard.push(newRow);
 		}
-
+		console.log(newBoard)
 		engine.board = newBoard;
 
 	},
 
 	buttons : {
 
-		board : $(".square")
+		board : $(".square"),
+
+		enter : $(".square").mouseenter(function(){
+			// console.log("hover");
+			var move = engine.player == "cross" 
+					 ? display.moves.cross 
+					 : engine.player == "circle" ? display.moves.circle : "";
+
+			if($(this).children().hasClass("move-empty")){
+				// console.log("if");
+				$(this).children().html(move).addClass("move-hover");
+			}
+
+		}),
+
+		leaves : $(".square").mouseleave(function(){
+			// console.log("hover");
+			if($(this).children().hasClass("move-hover")){
+				// console.log("if");
+				$(this).html(display.moves.empty).removeClass("move-hover");
+			}
+
+		})
 
 	},
 
@@ -233,6 +291,10 @@ var display = {
 				}
 
 				display.loadBoard();
+
+				engine.getEmptyMoves();
+
+				ia.move();
 			}
 			else{
 				console.log("occupied");
@@ -250,5 +312,48 @@ display.control = {
 
 }
 
-var ia = {};
+var ia = {
+
+	perfectMove : function(board,player){
+
+
+		if(player != "cross" && player != "circle") return console.log("error");
+
+		var moves = engine.emptyMoves;
+		
+		var perfectRow;
+		var perfectCol;
+
+
+	},
+
+	testMove : function(move,player){
+
+		var testingElement = player == "cross" ? 1 : 2;
+
+		var testingRow = move[0];
+		var testingCol = move[1];
+
+		var testingBoard = engine.board;
+
+		testingBoard[testingRow][testingCol] = testingElement;
+
+		console.log(engine.win(testingBoard) == testingElement);
+	},
+
+	move : function(){
+
+		var newElement = ia.player == "cross" ? 1 : 2;
+
+		var row = engine.emptyMoves[0][0];
+		var col = engine.emptyMoves[0][1];
+
+		engine.board[row][col] = newElement;
+
+		display.printBoard();
+
+	}
+
+
+};
 
