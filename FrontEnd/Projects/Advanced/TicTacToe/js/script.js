@@ -13,12 +13,6 @@
 
 var engine = {
 
-	// player : "cross",
-
-	// board : [[0,0,0],[0,0,0],[0,0,0]],
-
-	// emptyMoves : [],
-
 	start : function(player){
 
 		engine.setPlayer(player);
@@ -27,7 +21,12 @@ var engine = {
 
 	},
 
-	getEmptyMoves : function(){
+	getEmptyMoves : function(board){
+		var def = false;
+		if(board == undefined) {
+			board = engine.board;
+			def = true;
+		}
 
 		var emptyMoves = [];
 
@@ -41,12 +40,14 @@ var engine = {
 			}
 		}
 
-		engine.emptyMoves = emptyMoves;
+		if(def){engine.emptyMoves = emptyMoves;}
+		else {return emptyMoves;}
 
 	},
 
 	win : function (board) {
 
+	  if(board == undefined){board = engine.board}
 	  // arrays to evaluate: diagonals, verticals, horizontals:
 
 	  // diagonals:
@@ -78,6 +79,21 @@ var engine = {
 	},
 
 	tools : {
+
+		debug : function(board){
+			if(board == undefined) {board = engine.board;}
+			// returns a readable board:
+			var readableBoard = "\n";
+			for(var row = 0; row<3;row++){
+
+				readableBoard += "|";
+				readableBoard += board[row].join("|").replace(/2/g,"O").replace(/1/g,"X").replace(/0/g," ");
+				readableBoard += "|\n";
+
+			}
+			return readableBoard;
+
+		},
 
 		// transpose a matrix:
 		transpose : function(a){
@@ -283,9 +299,11 @@ var display = {
 
 					case "cross":
 						$(this).html(display.moves.cross);
+						engine.player = "circle";
 						break;
 					case "circle":
 						$(this).html(display.moves.circle);
+						engine.player = "cross";
 						break;
 
 				}
@@ -294,7 +312,7 @@ var display = {
 
 				engine.getEmptyMoves();
 
-				ia.move();
+				//ia.move();
 			}
 			else{
 				console.log("occupied");
@@ -313,6 +331,8 @@ display.control = {
 }
 
 var ia = {
+
+	turn : false,
 
 	perfectMove : function(board,player){
 
@@ -349,11 +369,316 @@ var ia = {
 		var col = engine.emptyMoves[0][1];
 
 		engine.board[row][col] = newElement;
-
+		engine.getEmptyMoves();
 		display.printBoard();
+
+	},
+
+	minimax : function(board){
+
+		if(board == undefined) {board = engine.board;}
+
+		ia.turn = !ia.turn;
+
+		var lookingFor = ia.turn ? 2 : 1;
+
+		var enemy = ia.turn ? 1 : 2;
+
+		var newMove = lookingFor;
+
+		var emptyMoves = engine.getEmptyMoves(board);
+
+		var turn = 10 - emptyMoves.length;
+
+		console.log("turn #"+turn);
+
+		for(var move in emptyMoves){
+
+			var row = emptyMoves[move][0];
+			var col = emptyMoves[move][1];
+
+			board[row][col] = newMove;
+
+			console.log(engine.tools.debug(board));
+
+			// switch(engine.win(board)){
+
+			// 	case lookingFor:
+			// 		console.log("WIN");
+			// 		break;
+			// 	case enemy:
+			// 		console.log("LOSE");
+			// 		break;
+			// 	case 0:
+			// 		console.log("tie");
+			// 		break;
+			// 	case -1:
+			// 		console.log("keep looking");
+			// 		ia.minimax(board);
+			// 		break;
+
+			// }
+
+
+		}
+
+
+
 
 	}
 
 
 };
+
+
+engine.start("circle");
+engine.board = [[1,0,2],[2,0,0],[2,1,1]];
+engine.board = [[0,0,0],[2,0,2],[1,1,0]];
+display.printBoard();
+ia.turn = false;
+
+// secondary functions looking for minimax:
+
+// when i call minimax on a board, it should tell me where the circle wants to move.
+
+// always going to be called in x turn (ia turn = false)
+
+
+
+// minimax = function(board){
+// 	//
+// 	if(board == undefined) {
+// 		board = engine.board;
+// 	}
+
+// 	// if(score == undefined){
+// 	// 	score = 0;
+// 	// }
+
+// 	// change turn
+// 	ia.turn = !ia.turn;
+
+// 	// if ia's turn, add cirlce (2), else, add cross (1)
+// 	var nmove = ia.turn ? 2 : 1;
+
+// 	// in ia's turn, pick the min, else, pick the max
+// 	var pick = ia.turn ? function(a,b){return Math.min(a,b);} : function(a,b){return Math.max(a,b);}
+	
+// 	// var scores;
+
+// 	var emptyMoves = engine.getEmptyMoves(board);
+
+// 	for(var move in emptyMoves){
+// 		var row = emptyMoves[move][0];
+// 		var col = emptyMoves[move][1];
+		
+// 		board[row][col] = nmove;
+// 		console.log("\n\n___"+times+"______\n\n");
+// 		console.log("empty moves: "+emptyMoves);	
+// 		console.log(engine.tools.debug(board));
+		
+// 		console.log("move: "+row,col);
+// 		console.log("score: "+win(board));
+// 		if(!win(board)) minimax(board);
+// 		board[row][col] = 0;
+// 		times++;
+// 		scores.push(win(board))
+// 		// break;
+// 	}
+
+// 	console.log(scores);
+
+
+// }
+
+//asume player is cross
+win = function(board){
+
+	if(board == undefined) board = engine.board;
+
+	var outcome = engine.win(board);
+
+	if(outcome == 1) return -1;
+	if(outcome == 2) return 1;
+	return 0;
+
+}
+
+/////
+
+/*
+
+ evaluate a move
+
+
+ win return 1
+ lose return -1
+ tie repeat
+
+
+*/
+
+
+// minimax = function(board,depth){
+// 	// if(depth == undefined) depth = 0;
+// 	depth = depth == undefined ? 1 : depth;
+// 	console.log(depth);
+// 	// change turn:
+// 	ia.turn = !ia.turn;
+// 	console.log("this is ia s turn: "+ia.turn);
+
+// 	// chose move:
+// 	var newMove = ia.turn ? 1 : 2;
+// 	console.log("the new move will be: "+newMove);
+// 	//first call in the original board:
+// 	if(board == undefined) board = engine.board;
+
+// 	// moves I'm going to try
+// 	var emptyMoves = engine.getEmptyMoves(board);
+// 	console.log("the moves to try are: "+emptyMoves);
+
+// 	// moves i'm going to evaluate:
+// 	var moves = [];
+// 	// scores of those moves
+// 	var scores = [];
+
+
+// 	// for every move, give it a score
+// 	// repeat until +-1 is reached, or move.length=0
+// 	for(var move in emptyMoves){
+
+// 		console.log("I'm evaluating the move: "+emptyMoves[move])
+
+// 		var evaluatingBoard = board;
+
+// 		var evaluatingRow = emptyMoves[move][0];
+// 		var evaluatingCol = emptyMoves[move][1];
+
+// 		evaluatingBoard[evaluatingRow][evaluatingCol] = newMove;
+
+// 		console.log("the evaluating board is: "+engine.tools.debug(evaluatingBoard));
+
+// 		var score = win(evaluatingBoard);
+// 		console.log("the score is: "+score);
+// 		// if score != 0, then push the score and stop looking for others (others will be equal or 0)
+// 		if( score != 0 ){ 
+// 			console.log("I'm pushing the score");
+// 			scores.push(score); 
+// 			console.log("I'm pushing the move");
+// 			moves.push(emptyMoves[move]);
+
+// 			break;
+// 		}//end with that move
+// 		else{ 
+// 			console.log("I'm going to call minimax");
+// 			depth ++;
+// 			minimax(evaluatingBoard,depth); 
+// 			// change turn
+// 			console.log("I finished the secondary minimax");
+// 			ia.turn = !ia.turn;
+// 		}//repeat
+
+// 		moves.push(emptyMoves[move]);
+// 		scores.push(score);
+// 		console.log("I finished evaluating the move: "+emptyMoves[move]);
+// 		console.log("the moves"+moves);
+// 		board[evaluatingRow][evaluatingCol] = 0;
+// 	}
+
+// 	// return the best board
+
+// 	var pick = ia.turn ? pickMin : pickMax;
+// 	console.log("depth is: "+depth);
+// 	console.log("this is ia s turn: "+ia.turn);
+// 	console.log("I'm going to pick among: "+moves);
+// 	console.log("using"+pick)
+// 	console.log("that have scores: " +scores);
+// 	var bestMove = pick(moves,scores);
+// 	console.log("And I picked "+bestMove);
+// 	var bestRow = bestMove[0];
+// 	var bestCol = bestMove[1];
+
+// 	var bestBoard = board;
+
+// 	bestBoard[bestRow][bestCol] = newMove;
+
+
+// 	depth--;
+// 	return bestBoard;
+
+// }
+// var choice = [];
+
+// minimax = function(board){
+
+// 	// it returns the score of the game if it's ended (1 or -1)
+// 	if(!engine.win(board)) {console.log("hey");return engine.win(board);}
+
+// 	var scores = [];
+// 	var moves = [];
+
+// 	var move = ia.turn ? 1 : 2;
+// 	ia.turn = !ia.turn;
+
+// 	pick = ia.turn ? pickMin : pickMax;
+
+// 	var empty = engine.getEmptyMoves(board);
+
+// 	for(var position in empty){
+// 		console.log(empty[position]);
+// 		var possibleBoard = newBoard(board,empty[position],move);
+// 		var score = minimax(possibleBoard);
+// 		console.log(score);
+// 		scores.push(score);
+// 		moves.push(empty[position]);
+	
+// 	}
+
+// 	var best = pick(moves,scores);
+	
+// 	choice = best[0];
+// 	console.log(best)
+// 	return best[1];
+
+// }
+
+newBoard = function(board,position,move){
+
+	board[position[0]][position[1]] = move; 
+
+	return board;
+
+}
+
+pickMin = function(moves,scores){
+
+	var min = 0;
+	var index = 0;
+
+	for(var i in scores){
+		if(scores[i] < min){
+			min = scores[i];
+			index = i;
+		}
+		// min = scores[i] < min ? scores[i] : min;
+	}
+
+	return [moves[index],scores[index]];
+}
+
+pickMax = function(moves,scores){
+
+	var max = 0;
+	var index = 0;
+
+	for(var i in scores){
+		if(scores[i] > max){
+			max = scores[i];
+			index = i;
+		}
+	}
+
+	return [moves[index],scores[index]];
+}
+
 
