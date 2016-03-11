@@ -1,3 +1,19 @@
+/*
+NOTE: after =, dot substitute the number or is it added to the number?
+
+Current state: substitute
+
+
+
+NOTE 2: add parenthesis
+
+
+
+NOTE 3: prevent eval from injections
+
+*/
+
+
 //////////////////////////
 /////////////////////////
 //////
