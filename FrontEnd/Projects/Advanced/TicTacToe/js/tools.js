@@ -36,3 +36,10 @@ var scores = [0,-1];
 debug(pickMin(moves,scores)[0]);
 
 
+// how to change it dynamically
+
+ia = {};
+
+ia.turn = false;
+
+var pick = ia.turn ? pickMin : pickMax;
