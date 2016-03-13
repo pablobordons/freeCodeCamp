@@ -1,3 +1,12 @@
+/*
+
+This file shares code with tools.js
+
+This needs to be formatted
+
+*/
+
+
 
 //////////////////////////
 /////////////////////////
@@ -680,5 +689,15 @@ pickMax = function(moves,scores){
 
 	return [moves[index],scores[index]];
 }
+
+
+// how to change it dynamically
+
+ia = {};
+
+ia.turn = false;
+
+var pick = ia.turn ? pickMin : pickMax;
+
 
 
