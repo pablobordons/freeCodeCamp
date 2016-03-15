@@ -1,12 +1,3 @@
-/*
-
-This file shares code with tools.js
-
-This needs to be formatted
-
-*/
-
-
 
 //////////////////////////
 /////////////////////////
@@ -17,92 +8,189 @@ This needs to be formatted
 //
 
 
-
-
-
 var engine = {
 
 	start : function(player){
 
-		engine.setPlayer(player);
+		engine.player = player;
 		display.loadBoard();
 		engine.getEmptyMoves();
 
-	},
+		ia.player = player == "cross" ? "circle" : "cross";
 
+	},
+	// get the empty moves in a board
+	// if no board is passed, load the empty moves of the engine.board into engine.emptyMoves
 	getEmptyMoves : function(board){
+
+		// set the default mode to false
 		var def = false;
-		if(board == undefined) {
+
+		// if board is not given
+		if(board == undefined && engine.board != undefined) {
+			// get the engine.board
 			board = engine.board;
+			// set the default mode to true
 			def = true;
 		}
 
 		var emptyMoves = [];
 
+		// for every element in the board:
 		for(var row = 0; row < 3; row++){
-
 			for(var col = 0; col<3; col++){
-
-				if(!engine.board[row][col]){
+				// if the element is zero, push it to the empty moves
+				if(!board[row][col]){
 					emptyMoves.push([row,col]);
 				}
 			}
 		}
 
+		// if default mode is true, load the moves and return undefined
 		if(def){engine.emptyMoves = emptyMoves;}
+
+		// if default mode is false, return the moves
 		else {return emptyMoves;}
 
 	},
 
-	win : function (board) {
+	clone : function(board){
 
-	  if(board == undefined){board = engine.board}
-	  // arrays to evaluate: diagonals, verticals, horizontals:
+		board = board == undefined ? engine.board : board;
 
-	  // diagonals:
-	  var arr = engine.tools.getDiagonal(board);
-	  
-	  // vertical lines:
-	  var boardT = engine.tools.transpose(board);
+		var newBoard = [];
+		for(var r = 0; r<3; r++){
+			var newRow = [];
+			for(var c = 0; c<3; c++){
+				newRow.push(board[r][c]);
+			}
+			newBoard.push(newRow);
+		}
 
-	  for(var row in board){
-	    arr.push(board[row]);
-	    arr.push(boardT[row]);
-	  }
-	  
-	  // now let's evaluate every row:
-	  // check if in any of them all are 1 or 2:
-	  // if so, return the number
-	  for(var i = 0; i<arr.length; i++){
-	    //console.log(arr[i]);
-	    if(engine.tools.evaluateRow(arr[i])) {
-	      return engine.tools.evaluateRow(arr[i])
-	      };
-	  }
-	 
-	  //check if there're spaces left:
-	  if(engine.tools.findInMatrix(board,0)) return -1;
+		return newBoard;
+	},
 
-	  return 0;
+	// add a move [X,Y] with value 0, 1 or 2 to a board
+	addMove : function(move,value,board){
+
+		//if no board is given, take the engine.board
+		board = board == undefined ? engine.board : board;
+
+		var newBoard = engine.clone(board);
+
+		if(value != 1 && value != 2 && value != 0) {console.log("wrong value"); return;}
+		
+		newBoard[move[0]][move[1]] = value;
+
+		return newBoard;
+
+	},
+
+	// return 1 if cross wins
+	// return 2 if circle wins
+	// return -1 if it's a tie but there're spaces left
+	// return 0 if it's a tie 
+	evaluateBoard : function(board){
+
+		board = board == undefined ? engine.board : board;
+
+		// check in every possible arrays if there are a all equal 1 or 2
+
+		// arrays to evaluate: diagonals, verticals, horizontals:
+
+		// diagonals:
+		var arr = engine.tools.getDiagonal(board);
+
+		// vertical lines:
+		var boardT = engine.tools.transpose(board);
+
+		for(var row in board){
+		arr.push(board[row]);
+		arr.push(boardT[row]);
+		}
+
+		// now let's evaluate every row:
+		// check if in any of them all are 1 or 2:
+		// if so, return the number
+		for(var i = 0; i<arr.length; i++){
+			// evaluaterow returns 1, 2 or 0:
+			// if the evaluation of the row is not 0 in any of them, return that number:
+
+			var evaluation = engine.tools.evaluateRow(arr[i]);
+
+			if(evaluation) {
+			  return evaluation;
+			  };
+		}
+
+		//check if there're spaces left: (tie and final game)
+		if(engine.tools.findInMatrix(board,0)) return 0;
+
+		// return tie and continue (spaces left)
+		return -1;
+
+	},
+
+	// end : function(board){
+
+	// 	board = board == undefined ? engine.board : board;
+
+	// 	return 
+
+	// },
+
+	win : function (board, player){
+
+		player = player == undefined ? engine.player : player;
+
+		// player can be set as cross or circle, or as 1 or 2
+
+		player = player == "cross" || player == 1
+			   ? 1 
+			   : player == "circle" || player == 2
+			   ? 2 
+			   : "error";
+
+		return player == this.evaluateBoard(board) ? true : false;
+
+	},
+
+	// wouldWin : function(board, player, move, value){
+
+	// 	board = 
+
+	// }
+
+	setPlayer : function(player){
+
+		engine.player = player;
+
+		ia.player = player == "cross" ? "circle" : "cross";
 
 	},
 
 	tools : {
 
-		debug : function(board){
-			if(board == undefined) {board = engine.board;}
-			// returns a readable board:
-			var readableBoard = "\n";
-			for(var row = 0; row<3;row++){
+		// print a readable board:
+		debug : function(board,move,value){
 
+			board = board == undefined ? engine.board : board;
+
+			if(move != undefined && value != undefined) board[move[0]][move[1]] = value;
+
+			// returns a readable board:
+			var readableBoard = "";
+			for(var row = 0; row<3;row++){
 				readableBoard += "|";
 				readableBoard += board[row].join("|").replace(/2/g,"O").replace(/1/g,"X").replace(/0/g," ");
 				readableBoard += "|\n";
-
 			}
+			console.log(readableBoard)
 			return readableBoard;
-
 		},
+
+
+		// Math tools for the evaluation of the board:
 
 		// transpose a matrix:
 		transpose : function(a){
@@ -133,6 +221,8 @@ var engine = {
 		evaluateRow : function(arr){
 		   //if not all are the same:
 		   if(!engine.tools.allEqual(arr)) return 0;
+
+		   // all equal to:
 		   else{
 		      // 1 wins
 		      if(arr[0]==1) return 1;
@@ -159,43 +249,15 @@ var engine = {
 		  return false;
 		}
 
-	},
-
-	setPlayer : function(player){
-
-		engine.player = player;
-
-		ia.player = player == "cross" ? "circle" : "cross";
 	}
 
 };
 
+
 var display = {
 
-	board : (function(){
 
-		var board = [];
-
-		for(var row = 1; row < 4; row++){
-
-			var newRow = [];
-
-			for(var col = 1; col < 4; col++){
-
-				var move = $(".row:nth-child("+row+") .square:nth-child("+col+")");
-
-				newRow.push(move);
-
-			}
-
-			board.push(newRow);
-
-		}
-
-		return board;
-
-	})(),
-
+	// different move options, cross, circle or empty
 	moves : {
 
 		cross : '<div class="move move-cross"><i class="fa fa-times"></i></div>',
@@ -206,33 +268,135 @@ var display = {
 
 	},
 
-	printBoard : function(){
 
-		for(var row in this.board){
-			for(var col in this.board[row]){
+	// create the board in the page
+	htmlBoard : function(){
 
-				var move 
-				switch(engine.board[row][col]){
+		var board = "";
+
+		for(var row = 1; row < 4; row++){
+			var newRow = '<div class="row">';
+			for(var col = 1; col < 4; col++){
+				newRow += "<div class='square'><div class='move move-empty'></div></div>";
+			}
+			board += newRow+'</div>';
+		}
+
+		this.setItem();
+		$(".board").html(board);
+
+	},
+
+	setInitialState : function(){
+
+		var initialState = '<div class="menu">'
+						 + '<div class="btn-player btn-cross"><i class="fa fa-times"></i></div>'
+						 + '<div class="btn-player btn-circle"><i class="fa fa-circle-o"></i></div>'
+						 + '<div class="btn-player btn-vs">'
+						 + '<i class="fa fa-user"></i><i class="fa fa-bolt"></i><i class="fa fa-user"></i></div>'
+						 + '</div>';
+
+		this.setItem();
+		$(".board").html(initialState);
+
+		this.buttons.set();
+		this.control.set();
+
+	},
+
+	setMenuState : function(){
+
+		var menu = '<div class="overlay-menu overlay">'
+				 +		'<div class="btn-player btn-reset">'
+				 +				'<i class="fa fa-refresh fa-spin"></i>'	
+				 +		'</div>'
+				 +	'</div>';
+
+		$(".item").append(menu);
+
+		this.buttons.set();
+		this.control.set();
+
+
+	},
+
+	setItem : function(){
+
+		var item = '<div class="board"></div>'
+				 + '<h5 class="reference">coded by <a title="pboest profile on freecodecamp"href="#">pboest</a></h5>';
+			
+		$(".item").html(item);
+	},
+
+	/*
+			1 Set the html board
+			2 get the access to the DOM board and store it in DOMBoard
+			3 set the buttons 
+			4 asign functions to the buttons	
+	*/
+	setDOMBoard : function(){
+		// 1 set the html board
+		this.htmlBoard();
+
+		// 2 get access to the DOM board
+		var board = [];
+		for(var row = 1; row < 4; row++){
+			var newRow = [];
+			for(var col = 1; col < 4; col++){
+				var square = $(".row:nth-child("+row+") .square:nth-child("+col+")");
+				newRow.push(square);
+			}
+			board.push(newRow);
+		}
+		this.DOMBoard = board;
+		
+		// set the buttons and the control
+		this.buttons.set();
+		this.control.set();
+
+	},
+
+	// print a board. If no board is given, print the board in engine.board
+	printBoard : function(board){
+
+		if(board == undefined) board = engine.board;
+
+		// for every square in display.board, add the proper move;
+
+		// for every row
+		for(var row in this.DOMBoard){
+			// for every col:
+			for(var col in this.DOMBoard[row]){
+
+				// retrieve the element in the given board and send it to the dom Board
+				switch(board[row][col]){
 					case 0:
-						move = '<div class="move move-empty"></div>';
+						this.DOMBoard[row][col].html(this.moves.empty);
 						break;
 					case 1:
-						move = '<div class="move move-cross"><i class="fa fa-times"></i></div>';
+						this.DOMBoard[row][col].html(this.moves.cross);
 						break;
 					case 2:
-						move = '<div class="move move-circle"><i class="fa fa-circle-o"></i></div>';
+						this.DOMBoard[row][col].html(this.moves.circle);
 						break;
 					default:
 						console.log("error in board");
 						break;
 				}
 
-				this.board[row][col].html(move);
 			}
 		}
 	},
 
-	loadBoard : function(){
+
+	// load the board printed in the DOM into the engine.board
+	// if an argument is passed, return the board instead
+	loadBoard : function(board){
+
+		if(board != undefined){
+			engine.board = engine.clone(board);
+			return;
+		}
 
 		var newBoard = [];
 
@@ -242,7 +406,7 @@ var display = {
 
 			for(var col = 0; col < 3 ; col++){
 
-				var move = display.board[row][col].children();
+				var move = display.DOMBoard[row][col].children();
 
 				var newElement; 
 
@@ -265,54 +429,59 @@ var display = {
 
 			newBoard.push(newRow);
 		}
-		console.log(newBoard)
+
+		// depending on the mode, return the new Board or load it into the engine
 		engine.board = newBoard;
-
+		
 	},
 
+
+	// reference to the DOM buttons
 	buttons : {
+		// every square in the dom
+		set : function(){
+			this.cell = $(".square");
 
-		board : $(".square"),
+			this.playerCross = $(".btn-cross");
 
-		enter : $(".square").mouseenter(function(){
-			// console.log("hover");
-			var move = engine.player == "cross" 
-					 ? display.moves.cross 
-					 : engine.player == "circle" ? display.moves.circle : "";
+			this.playerCircle = $(".btn-circle");
 
-			if($(this).children().hasClass("move-empty")){
-				// console.log("if");
-				$(this).children().html(move).addClass("move-hover");
-			}
+			this.playerVS = $(".btn-vs");
 
-		}),
-
-		leaves : $(".square").mouseleave(function(){
-			// console.log("hover");
-			if($(this).children().hasClass("move-hover")){
-				// console.log("if");
-				$(this).html(display.moves.empty).removeClass("move-hover");
-			}
-
-		})
+			this.reset = $(".btn-reset");
+		}
 
 	},
 
+	// functions to assing to the buttons
 	logic : {
 
-		board : function(){
-			console.log($(this));
+		// pressing a cell
+		press : function(){
+
+			console.log("you're pressing a cell!");
+
+			// if the cell is empty:
 			if($(this).children().hasClass("move-empty")){
 
-				switch(engine.player){
+				switch(engine.player){	
 
 					case "cross":
 						$(this).html(display.moves.cross);
-						engine.player = "circle";
+						// engine.player = "circle";
+						if(engine.versusMode){
+							engine.player = "circle";	
+						}
 						break;
 					case "circle":
 						$(this).html(display.moves.circle);
-						engine.player = "cross";
+						// engine.player = "cross";
+						if(engine.versusMode){
+							engine.player = "cross";
+						}
+						break;
+					default:
+						console.log("player hasn't been set.");
 						break;
 
 				}
@@ -321,383 +490,155 @@ var display = {
 
 				engine.getEmptyMoves();
 
-				//ia.move();
+				// console.log(engine.win(engine.board,1));
+				// console.log(engine.win(engine.board,2));
+
+				// console.log(engine.evaluateBoard());
+				if(engine.evaluateBoard()) {
+					display.setMenuState();
+					return;
+				}
+
+				// ia moves:
+				if(!engine.versusMode){
+					var newMove = ia.move(engine.board);
+					var value = ia.player == "cross" ? 1 : 2;
+					var newBoard = engine.addMove(newMove,value,engine.board);
+					
+					
+					display.loadBoard(newBoard);
+					display.printBoard();
+	
+					
+					if(engine.evaluateBoard(newBoard)) {
+						display.setMenuState();
+						return;
+					}
+				}
 			}
 			else{
-				console.log("occupied");
+				console.log("this cell was occupied.");
+			}
+		},
+
+		enter : function(){
+
+			console.log("you're entering a cell!");
+
+			// asign the hover movement depending on the player (cross or circle):
+			var move = engine.player == "cross" 
+						 ? display.moves.cross 
+						 : engine.player == "circle" ? display.moves.circle : "";
+
+			// if the cell is empty, 
+			// 1 add the move to the html
+			// 2 add a hover-class to be able to remove the move later:
+			if($(this).children().hasClass("move-empty")){
+				$(this).children().html(move).addClass("move-hover");
 			}
 
+		},
+
+
+		leave : function(){
+
+						console.log("you're leaving a cell!");
+
+			// if the cell was originally empty (has the class move-hover)
+			// change it to empty and remove the move-hover class
+			if($(this).children().hasClass("move-hover")){
+				$(this).html(display.moves.empty).removeClass("move-hover");
+			}
+		},
+
+		playerCross : function(){
+
+			display.setDOMBoard();
+
+			engine.start("cross");
+
+			engine.versusMode = false;
+
+		},
+
+		playerCircle : function(){
+
+			display.setDOMBoard();
+
+			engine.start("circle");
+
+			engine.versusMode = false;
+		},	
+
+		playerVS : function(){
+
+			display.setDOMBoard();
+
+			engine.start("cross");
+
+			engine.versusMode = true;
+		},
+
+		reset : function(){
+
+			display.setInitialState();
+			console.log("RESET");
+		}
+
+	},
+
+	// assign the logic to the buttons
+	control : {
+
+		set : function(){
+
+			this.cell = display.buttons.cell.click(display.logic.press);
+
+			this.enter = display.buttons.cell.mouseenter(display.logic.enter);
+
+			this.leave = display.buttons.cell.mouseleave(display.logic.leave);
+
+			this.playerCross = display.buttons.playerCross.click(display.logic.playerCross);
+
+			this.playerCircle = display.buttons.playerCircle.click(display.logic.playerCircle);
+
+			this.playerVS = display.buttons.playerVS.click(display.logic.playerVS);
+
+			this.reset = display.buttons.reset.click(display.logic.reset);
 
 		}
+
 	}
 
 };
 
-display.control = {
+ia = {
 
-	board : display.buttons.board.click(display.logic.board)
+	// return the best move
+	move : function(board){
+		var empty = engine.getEmptyMoves(board);
+		return empty[0];
+		// return a move
+	},
 
-}
 
-var ia = {
 
+	// ia.turn
 	turn : false,
 
-	perfectMove : function(board,player){
 
 
-		if(player != "cross" && player != "circle") return console.log("error");
+	// set turn
+	setTurn : function(){
 
-		var moves = engine.emptyMoves;
-		
-		var perfectRow;
-		var perfectCol;
-
-
-	},
-
-	testMove : function(move,player){
-
-		var testingElement = player == "cross" ? 1 : 2;
-
-		var testingRow = move[0];
-		var testingCol = move[1];
-
-		var testingBoard = engine.board;
-
-		testingBoard[testingRow][testingCol] = testingElement;
-
-		console.log(engine.win(testingBoard) == testingElement);
-	},
-
-	move : function(){
-
-		var newElement = ia.player == "cross" ? 1 : 2;
-
-		var row = engine.emptyMoves[0][0];
-		var col = engine.emptyMoves[0][1];
-
-		engine.board[row][col] = newElement;
-		engine.getEmptyMoves();
-		display.printBoard();
-
-	},
-
-	minimax : function(board){
-
-		if(board == undefined) {board = engine.board;}
-
-		ia.turn = !ia.turn;
-
-		var lookingFor = ia.turn ? 2 : 1;
-
-		var enemy = ia.turn ? 1 : 2;
-
-		var newMove = lookingFor;
-
-		var emptyMoves = engine.getEmptyMoves(board);
-
-		var turn = 10 - emptyMoves.length;
-
-		console.log("turn #"+turn);
-
-		for(var move in emptyMoves){
-
-			var row = emptyMoves[move][0];
-			var col = emptyMoves[move][1];
-
-			board[row][col] = newMove;
-
-			console.log(engine.tools.debug(board));
-
-			// switch(engine.win(board)){
-
-			// 	case lookingFor:
-			// 		console.log("WIN");
-			// 		break;
-			// 	case enemy:
-			// 		console.log("LOSE");
-			// 		break;
-			// 	case 0:
-			// 		console.log("tie");
-			// 		break;
-			// 	case -1:
-			// 		console.log("keep looking");
-			// 		ia.minimax(board);
-			// 		break;
-
-			// }
-
-
-		}
-
-
-
+		this.turn = !engine.turn;
 
 	}
-
 
 };
 
 
-engine.start("circle");
-engine.board = [[1,0,2],[2,0,0],[2,1,1]];
-engine.board = [[0,0,0],[2,0,2],[1,1,0]];
-display.printBoard();
-ia.turn = false;
 
-// secondary functions looking for minimax:
 
-// when i call minimax on a board, it should tell me where the circle wants to move.
 
-// always going to be called in x turn (ia turn = false)
-
-
-
-// minimax = function(board){
-// 	//
-// 	if(board == undefined) {
-// 		board = engine.board;
-// 	}
-
-// 	// if(score == undefined){
-// 	// 	score = 0;
-// 	// }
-
-// 	// change turn
-// 	ia.turn = !ia.turn;
-
-// 	// if ia's turn, add cirlce (2), else, add cross (1)
-// 	var nmove = ia.turn ? 2 : 1;
-
-// 	// in ia's turn, pick the min, else, pick the max
-// 	var pick = ia.turn ? function(a,b){return Math.min(a,b);} : function(a,b){return Math.max(a,b);}
-	
-// 	// var scores;
-
-// 	var emptyMoves = engine.getEmptyMoves(board);
-
-// 	for(var move in emptyMoves){
-// 		var row = emptyMoves[move][0];
-// 		var col = emptyMoves[move][1];
-		
-// 		board[row][col] = nmove;
-// 		console.log("\n\n___"+times+"______\n\n");
-// 		console.log("empty moves: "+emptyMoves);	
-// 		console.log(engine.tools.debug(board));
-		
-// 		console.log("move: "+row,col);
-// 		console.log("score: "+win(board));
-// 		if(!win(board)) minimax(board);
-// 		board[row][col] = 0;
-// 		times++;
-// 		scores.push(win(board))
-// 		// break;
-// 	}
-
-// 	console.log(scores);
-
-
-// }
-
-//asume player is cross
-win = function(board){
-
-	if(board == undefined) board = engine.board;
-
-	var outcome = engine.win(board);
-
-	if(outcome == 1) return -1;
-	if(outcome == 2) return 1;
-	return 0;
-
-}
-
-/////
-
-/*
-
- evaluate a move
-
-
- win return 1
- lose return -1
- tie repeat
-
-
-*/
-
-
-// minimax = function(board,depth){
-// 	// if(depth == undefined) depth = 0;
-// 	depth = depth == undefined ? 1 : depth;
-// 	console.log(depth);
-// 	// change turn:
-// 	ia.turn = !ia.turn;
-// 	console.log("this is ia s turn: "+ia.turn);
-
-// 	// chose move:
-// 	var newMove = ia.turn ? 1 : 2;
-// 	console.log("the new move will be: "+newMove);
-// 	//first call in the original board:
-// 	if(board == undefined) board = engine.board;
-
-// 	// moves I'm going to try
-// 	var emptyMoves = engine.getEmptyMoves(board);
-// 	console.log("the moves to try are: "+emptyMoves);
-
-// 	// moves i'm going to evaluate:
-// 	var moves = [];
-// 	// scores of those moves
-// 	var scores = [];
-
-
-// 	// for every move, give it a score
-// 	// repeat until +-1 is reached, or move.length=0
-// 	for(var move in emptyMoves){
-
-// 		console.log("I'm evaluating the move: "+emptyMoves[move])
-
-// 		var evaluatingBoard = board;
-
-// 		var evaluatingRow = emptyMoves[move][0];
-// 		var evaluatingCol = emptyMoves[move][1];
-
-// 		evaluatingBoard[evaluatingRow][evaluatingCol] = newMove;
-
-// 		console.log("the evaluating board is: "+engine.tools.debug(evaluatingBoard));
-
-// 		var score = win(evaluatingBoard);
-// 		console.log("the score is: "+score);
-// 		// if score != 0, then push the score and stop looking for others (others will be equal or 0)
-// 		if( score != 0 ){ 
-// 			console.log("I'm pushing the score");
-// 			scores.push(score); 
-// 			console.log("I'm pushing the move");
-// 			moves.push(emptyMoves[move]);
-
-// 			break;
-// 		}//end with that move
-// 		else{ 
-// 			console.log("I'm going to call minimax");
-// 			depth ++;
-// 			minimax(evaluatingBoard,depth); 
-// 			// change turn
-// 			console.log("I finished the secondary minimax");
-// 			ia.turn = !ia.turn;
-// 		}//repeat
-
-// 		moves.push(emptyMoves[move]);
-// 		scores.push(score);
-// 		console.log("I finished evaluating the move: "+emptyMoves[move]);
-// 		console.log("the moves"+moves);
-// 		board[evaluatingRow][evaluatingCol] = 0;
-// 	}
-
-// 	// return the best board
-
-// 	var pick = ia.turn ? pickMin : pickMax;
-// 	console.log("depth is: "+depth);
-// 	console.log("this is ia s turn: "+ia.turn);
-// 	console.log("I'm going to pick among: "+moves);
-// 	console.log("using"+pick)
-// 	console.log("that have scores: " +scores);
-// 	var bestMove = pick(moves,scores);
-// 	console.log("And I picked "+bestMove);
-// 	var bestRow = bestMove[0];
-// 	var bestCol = bestMove[1];
-
-// 	var bestBoard = board;
-
-// 	bestBoard[bestRow][bestCol] = newMove;
-
-
-// 	depth--;
-// 	return bestBoard;
-
-// }
-// var choice = [];
-
-// minimax = function(board){
-
-// 	// it returns the score of the game if it's ended (1 or -1)
-// 	if(!engine.win(board)) {console.log("hey");return engine.win(board);}
-
-// 	var scores = [];
-// 	var moves = [];
-
-// 	var move = ia.turn ? 1 : 2;
-// 	ia.turn = !ia.turn;
-
-// 	pick = ia.turn ? pickMin : pickMax;
-
-// 	var empty = engine.getEmptyMoves(board);
-
-// 	for(var position in empty){
-// 		console.log(empty[position]);
-// 		var possibleBoard = newBoard(board,empty[position],move);
-// 		var score = minimax(possibleBoard);
-// 		console.log(score);
-// 		scores.push(score);
-// 		moves.push(empty[position]);
-	
-// 	}
-
-// 	var best = pick(moves,scores);
-	
-// 	choice = best[0];
-// 	console.log(best)
-// 	return best[1];
-
-// }
-
-newBoard = function(board,position,move){
-
-	board[position[0]][position[1]] = move; 
-
-	return board;
-
-}
-
-pickMin = function(moves,scores){
-
-	var min = 0;
-	var index = 0;
-
-	for(var i in scores){
-		if(scores[i] < min){
-			min = scores[i];
-			index = i;
-		}
-		// min = scores[i] < min ? scores[i] : min;
-	}
-
-	return [moves[index],scores[index]];
-}
-
-pickMax = function(moves,scores){
-
-	var max = 0;
-	var index = 0;
-
-	for(var i in scores){
-		if(scores[i] > max){
-			max = scores[i];
-			index = i;
-		}
-	}
-
-	return [moves[index],scores[index]];
-}
-
-
-// how to change it dynamically
-
-ia = {};
-
-ia.turn = false;
-
-var pick = ia.turn ? pickMin : pickMax;
-
-
-
+display.setInitialState();
