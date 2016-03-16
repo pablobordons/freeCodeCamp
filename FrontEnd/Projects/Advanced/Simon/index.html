@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>		
+
+	<!-- META INSTRUCTIONS -->
+		<!-- website containing unicode character set (superset of ASCII) -->
+		<meta charset="utf-8">
+
+		<!-- prevent IE from running in compatibility mode (causing CSS to not work)-->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<!-- make the site to use all the space in the browser window and scale to 1 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+	
+
+	<!-- TITLE -->
+
+		<title>Simon Game</title>
+
+		<!-- CDN links-->
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
+
+		<!-- Local include bootstrap css -->
+
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+
+		<!-- font alfa slab one -->
+		<!-- <link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'> -->
+
+	</head>
+	<body>
+		
+		<div class="container">
+			<div class="simon">
+				<div class="simon-key key-green"></div>
+				<div class="simon-key key-red"></div>
+				<div class="simon-key key-yellow"></div>
+				<div class="simon-key key-blue"></div>
+				<div class="panel">
+
+					<div class="simon-name">
+						<p>Simon<i class="fa fa-registered"></i></p>
+					</div>
+					<div class="options">
+						<div class="option option-count">
+							<div class="simon-btn simon-btn-count">
+								<p id="count">01</p>
+							</div>
+							<div class="simon-label simon-label-count">
+								<p>COUNT</p>
+							</div>
+						</div>
+						<div class="option option-start">
+							<div class="simon-btn simon-btn-start">
+								
+							</div>
+							<div class="simon-label simon-label-start">
+								<p>START</p>
+							</div>
+						</div>
+						<div class="option option-strict">
+							<div class="simon-btn simon-pilot-strict">
+								
+							</div>
+							<div class="simon-btn simon-btn-strict">
+								
+							</div>
+							<div class="simon-label simon-label-strict">
+								<p>STRICT</p>
+							</div>
+						</div>
+						<div class="option option-on">
+							<div class="simon-label simon-label-on"><p>ON</p></div>
+							<div class="simon-btn simon-btn-on">
+								<div class="simon-btn-on-token"></div>
+							</div>
+							<div class="simon-label simon-label-off"><p>OFF</p></div>
+						</div>
+					</div>
+					
+				</div>
+
+			</div>
+				
+		</div>
+
+	<!-- include jquery local-->
+
+		<!-- <script src="//code.jquery.com/jquery-1.12.0.min.js"></script> -->
+
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<!-- <script src="js/isSolved.js"></script> -->
+		<script src="js/script.js"></script>
+
+	</body>
+</html>
