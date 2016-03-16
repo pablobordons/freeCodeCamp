@@ -1,15 +1,28 @@
-
+//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////
+//////////////////////////////////////////////////      FCC PROJECT
 //////////////////////////
-/////////////////////////
+/////////////////////////			SIMON GAME
 //////
 /////
-////      SIMON
-///
+////      Pablo Bordons Estrada
+///		  15/03/2016
 //
 
 
 
 var simon = {
+
+
+	// a function to be called at the beginning of the page
+	start : function(){
+
+		simon.control.set();
+
+		simon.logic.on();
+
+	},
 
 	state : {
 
@@ -37,9 +50,14 @@ var simon = {
 			// state.on is true
 			simon.state.on = true;
 
+			// show a spiral!!
+			simon.keyLight.spiralSafe(10,90);
+
+			// erase the current game
+			simon.gameMachine.game = {};
+
 
 			//...
-
 
 		},
 
@@ -63,7 +81,11 @@ var simon = {
 			// state.on is false
 			simon.state.on = false;
 
-			
+			// show a spiral!!
+			simon.keyLight.spiralSafe(9,100);
+
+			// erase the current game
+			simon.gameMachine.game = {};
 
 
 			//...
@@ -72,13 +94,95 @@ var simon = {
 
 	},
 
+	// object storing the game logic
+	gameMachine : {
+
+		// start game
+
+		// distinguish beetween show/record---> think about this.
+		// if game is on, there're only two modes, record, and show.
+		// the basic one is record, show is an spectacle, 
+		// count flash, game flash.. etc
+
+		// this should be an object that can be called... and started
+
+		// constructor
+		Game : function(){
+
+			// game state (recording or showing)
+			this.recording = false;
+
+			// color rows
+			this.colorRow = [];
+			this.addColor = function(color){
+				this.colorRow.push(color);
+			},
+
+			this.addRandomColor = function(){
+
+				var colors = Object.keys(simon.keyColor);
+
+				this.addColor(simon.tools.pickRandom(colors));
+
+			}
+
+			// counter
+			this.counter = 0;
+
+
+			// start turn
+			this.startTurn = function(){
+
+				// this.counter ++
+				this.counter++;
+
+				// send the counter to the display
+				simon.buttons.others.count.html(this.counter);
+
+				// add a color to the Color Row
+				this.addRandomColor();
+
+				// for every color in the row, flash one
+				// for(var color in this.colorRow){
+				// 	console.log(this.colorRow[color]);
+				// }
+				simon.keyLight.flashRow(this.colorRow,"init",1000);
+
+			}
+
+
+
+		},
+
+		// instantiate a new game
+		setNewGame : function(){
+			simon.gameMachine.game = new simon.gameMachine.Game();
+		}
+
+	},
+
+	tools : {
+
+		pickRandom : function(arr){
+
+			var len = arr.length;
+
+			var randomInRange = Math.random()*len;
+
+			var randomIndex = Math.floor(randomInRange);
+
+			return arr[randomIndex];
+
+		}
+
+	},
 
 	// Colors for the keys, on and off
 	keyColor : {
 
 		green : {
-			on: "green",//"#49A738",
-			off: "#34A742"
+			off: "green",//"#49A738",
+			on: "#34A742"
 		},
 
 		red : {
@@ -97,7 +201,6 @@ var simon = {
 		}
 
 	},
-
 
 	// light effect for the keys
 	keyLight : {
@@ -135,10 +238,50 @@ var simon = {
 
 		},
 
+		// flash row!!
+		/**
+		***   Recursive function with safe mode (cannot be called if spiral is in execution)
+		**/
+		// flash every color in a given row with break between flashes 
+		flashRow : function(row,index,time,rest){
+
+			// break is false
+			if(!rest){
+
+				if(index == "init") index = row.length - 1;
+
+				// if index is zero, return and finish
+				if(index < 0) {
+					// row finished, safe is off
+					simon.keyLight.busy = false;
+					return;
+				}
+
+				var i = row.length - 1 - index; 
+				console.log(row[i]);
+				simon.keyLight.activateKey(row[i]);
+
+				window.setTimeout(function(){
+					//deactivate the key after given time
+					simon.keyLight.deactivateKey(row[i]);
+					// call recursively, same time, one index less:
+					simon.keyLight.flashRow(row,index-1,time,!rest);
+				},time);
+			}
+			else{
+				console.log("break")
+				window.setTimeout(function(){
+					simon.keyLight.flashRow(row,index,time,!rest);
+				},time/3);
+			}
+
+		},
+
 		// spiral of light!!
 		/**
 		***   Recursive function with safe mode (cannot be called if spiral is in execution)
 		**/
+		// creates an spiral, flashing through the colors 'index' times in natural order
 		spiral : function(index,time){
 			
 			// if index is zero, return and finish
@@ -149,7 +292,7 @@ var simon = {
 			}
 
 			// array of colors to iterate
-			var colors = ["green","red","blue","yellow"];
+			var colors = Object.keys(simon.keyColor);
 
 			// index for the color
 			var colorIndex = index%4;
@@ -189,7 +332,6 @@ var simon = {
 		}
 
 	},
-
 
 	// buttons for the simon game
 	buttons : {
@@ -316,9 +458,24 @@ var simon = {
 
 	}
 
-
 };
 
-simon.control.set();
 
-simon.logic.on();
+
+
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+simon.start();
+simon.gameMachine.setNewGame();
+
+var g = simon.gameMachine.game;
+
