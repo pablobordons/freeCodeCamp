@@ -1,3 +1,11 @@
+*{
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none;   
+  -khtml-user-select: none;    
+  -moz-user-select: none;      
+  -ms-user-select: none;       
+}
+
 body{
 	background-color: #E0FFA3;
 }
@@ -23,7 +31,7 @@ body{
 	z-index: 0;
 }
 
-.simon-key:hover{
+.clickable-key:hover{
 	cursor: pointer;
 	border-color: #232323;
 }
@@ -39,7 +47,7 @@ body{
 }
 
 .key-green{
-	background-color: #34A742;
+	background-color: green;
 	border-radius: 200px 0px 0px 0px;
 	border-top: 20px solid #333333;
 	border-left: 20px solid #333333;
@@ -159,7 +167,7 @@ body{
 .option-strict{
 	width: 50px;
 }
-.option-on{
+.option-power{
 	width: 95px;
 	height: 20px;
 	margin-left: 54px;
@@ -190,7 +198,7 @@ body{
 	font-size: 24px;
 	font-family: monaco;
 	letter-spacing: 2px;
-	color: #D30D23;
+	color: #40060F;
 }
 
 
@@ -242,13 +250,13 @@ body{
 	border: 2px solid #333;
 	border-radius: 100px;
 
-	background-color: red;
+	background-color: black;
 
 	top: -5px;
 	/*box-shadow: 0px 2px 3px 0px black;*/
 }
 
-.simon-btn-on{
+.simon-btn-power{
 	height: 20px;
 	width: 35px;
 	top: -3px;
@@ -258,11 +266,11 @@ body{
 	background-color: #666;
 }
 
-.simon-btn-on:hover{
+.simon-btn-power:hover{
 	cursor: pointer;
 }
 
-.simon-btn-on-token{
+.simon-btn-power-token{
 	height: 16px;
 	width: 16px;
 	top: 0px;
