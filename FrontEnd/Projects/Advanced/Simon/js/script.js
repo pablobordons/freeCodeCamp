@@ -10,6 +10,7 @@
 ///		  15/03/2016
 //
 
+// if start is pressed reset
 
 
 var simon = {
@@ -500,7 +501,7 @@ var simon = {
 				}
 
 				// wait until the next call
-				window.setTimeout(function(){
+				simon.state.flashTimer = window.setTimeout(function(){
 
 					//deactivate the key after given time
 					simon.keyLight.deactivateKey(row[i]);
@@ -515,7 +516,7 @@ var simon = {
 			}
 			// rest between flashes
 			else{
-				window.setTimeout(function(){
+				simon.state.flashTimer = window.setTimeout(function(){
 					simon.keyLight.flashRow(row,index,time,!rest,sound,endFunction);
 				},time/3);
 			}
@@ -883,14 +884,49 @@ var simon = {
 		},
 
 		start : function(){
-			if(simon.state.on){
-				console.log("start!");
-				simon.gameMachine.setNewGame();
-				simon.gameMachine.game.startTurn();
-			}
-			else{
-				console.log("please turn simon on!");
-			}
+			//if(!simon.keyLight.busy){
+				if(simon.state.on){
+					console.log("start!");
+
+
+					if(simon.gameMachine.game != undefined) simon.gameMachine.game.gameOver();
+
+
+
+					// set to off and on to kill the flash
+					//simon.state.on = false;
+					//simon.state.on = true;
+
+					if(simon.keyLight.busy){
+						simon.keyLight.busy = false;
+						// simon.keyLight.flashRow([],0,0,false,false);
+						// simon.keyLight.flashRow(row,index-1,time,!rest,sound,endFunction);
+						clearTimeout(simon.state.flashTimer);
+						simon.soundSystem.stopSound();
+					}
+					
+					// lithe spiral
+					simon.keyLight.spiralSafe(5,100,false);
+					window.setTimeout(function(){
+
+						simon.gameMachine.setNewGame();
+						simon.gameMachine.game.startTurn();
+
+					},600);
+
+				}
+				else{
+					console.log("please turn simon on!");
+				}
+			// }
+			// else{
+			// 	console.log("please wait until the end of the show!");
+			// 	simon.keyLight.busy = false;
+			// 	clearTimeout(simon.state.flashTimer);
+			// 	simon.soundSystem.stopSound();
+			// 	simon.gameMachine.setNewGame();
+
+			// }
 		},
 
 		strict : function(){
