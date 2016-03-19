@@ -131,29 +131,22 @@ var engine = {
 
 	},
 
-	// end : function(board){
 
-	// 	board = board == undefined ? engine.board : board;
+	// win : function (board, player){
 
-	// 	return 
+	// 	player = player == undefined ? engine.player : player;
+
+	// 	// player can be set as cross or circle, or as 1 or 2
+
+	// 	player = player == "cross" || player == 1
+	// 		   ? 1 
+	// 		   : player == "circle" || player == 2
+	// 		   ? 2 
+	// 		   : "error";
+
+	// 	return player == this.evaluateBoard(board) ? true : false;
 
 	// },
-
-	win : function (board, player){
-
-		player = player == undefined ? engine.player : player;
-
-		// player can be set as cross or circle, or as 1 or 2
-
-		player = player == "cross" || player == 1
-			   ? 1 
-			   : player == "circle" || player == 2
-			   ? 2 
-			   : "error";
-
-		return player == this.evaluateBoard(board) ? true : false;
-
-	},
 
 	// wouldWin : function(board, player, move, value){
 
@@ -459,7 +452,7 @@ var display = {
 		// pressing a cell
 		press : function(){
 
-			console.log("you're pressing a cell!");
+			//console.log("you're pressing a cell!");
 
 			// if the cell is empty:
 			if($(this).children().hasClass("move-empty")){
@@ -489,7 +482,6 @@ var display = {
 				display.loadBoard();
 
 				engine.getEmptyMoves();
-
 				// console.log(engine.win(engine.board,1));
 				// console.log(engine.win(engine.board,2));
 
@@ -508,7 +500,6 @@ var display = {
 					
 					display.loadBoard(newBoard);
 					display.printBoard();
-	
 					
 					if(engine.evaluateBoard(newBoard)) {
 						display.setMenuState();
@@ -523,7 +514,7 @@ var display = {
 
 		enter : function(){
 
-			console.log("you're entering a cell!");
+			//console.log("you're entering a cell!");
 
 			// asign the hover movement depending on the player (cross or circle):
 			var move = engine.player == "cross" 
@@ -542,7 +533,7 @@ var display = {
 
 		leave : function(){
 
-						console.log("you're leaving a cell!");
+						//console.log("you're leaving a cell!");
 
 			// if the cell was originally empty (has the class move-hover)
 			// change it to empty and remove the move-hover class
@@ -566,6 +557,17 @@ var display = {
 			display.setDOMBoard();
 
 			engine.start("circle");
+
+			var newMove = ia.move(engine.board);
+
+			var newBoard = engine.addMove(newMove,1,engine.board);
+			
+			
+			display.loadBoard(newBoard);
+			display.printBoard();
+			// engine.board[1][1] = 1;
+			// display.printBoard();
+
 
 			engine.versusMode = false;
 		},	
@@ -612,33 +614,202 @@ var display = {
 
 };
 
+
+display.setInitialState();
+
 ia = {
 
 	// return the best move
 	move : function(board){
+
+		var iaValue = engine.player == "cross" ? 2 : 1;
+		var plValue = engine.player == "cross" ? 1 : 2;
+
 		var empty = engine.getEmptyMoves(board);
-		return empty[0];
+		// return empty[0];
 		// return a move
-	},
 
+		console.log("thinking...");
 
+		// 1 find a winning spot
+			for(var m in empty){
 
-	// ia.turn
-	turn : false,
+				var row = empty[m][0];
+				var col = empty[m][1];
 
+				var newBoard = engine.clone(board);
 
+				newBoard[row][col] = iaValue;
 
-	// set turn
-	setTurn : function(){
+				if(engine.evaluateBoard(newBoard) == iaValue) {
+					return empty[m];
+				}
 
-		this.turn = !engine.turn;
+			};
+
+		console.log("after 1");
+
+		// 2 block a winning spot:
+			for(var m in empty){
+
+				row = empty[m][0];
+				col = empty[m][1];
+
+				newBoard = engine.clone(board);
+
+				newBoard[row][col] = plValue;
+
+				if(engine.evaluateBoard(newBoard) == plValue) {
+					return empty[m];
+				}
+
+			};
+
+		console.log("after 2");
+
+		// 3 create a for
+			// for(var m in empty){
+
+			// 	row = empty[m][0];
+			// 	col = empty[m][1];
+
+			// 	newBoard = engine.clone(board);
+
+			// 	newBoard[row][col] = iaValue;
+
+			// 	// fill a spot and check everywhere looking for winning positions. 
+			// 	var empty2 = engine.getEmptyMoves(newBoard);
+
+			// 	var counter = 0;
+
+			// 	for(var m2 in empty2){
+
+			// 		var row2 = empty2[m2][0];
+			// 		var col2 = empty2[m2][1];
+
+			// 		var newBoard2 = engine.clone(newBoard);
+
+			// 		newBoard2[row2][col2] = iaValue;
+
+			// 		if(engine.evaluateBoard(newBoard2) == iaValue) counter++;
+
+			// 	}
+
+			// 	if(counter > 1) return empty[m];
+
+			// };
+
+		// 4 prevent a fork:
+			// for(var m in empty){
+
+			// 	row = empty[m][0];
+			// 	col = empty[m][1];
+
+			// 	newBoard = engine.clone(board);
+
+			// 	newBoard[row][col] = plValue;
+
+			// 	// fill a spot and check everywhere looking for winning positions. 
+			// 	var empty2 = engine.getEmptyMoves(newBoard);
+
+			// 	var counter = 0;
+
+			// 	for(var m2 in empty2){
+
+			// 		var row2 = empty2[m2][0];
+			// 		var col2 = empty2[m2][1];
+
+			// 		var newBoard2 = engine.clone(newBoard);
+
+			// 		newBoard2[row2][col2] = plValue;
+
+			// 		if(engine.evaluateBoard(newBoard2) == plValue) counter++;
+
+			// 	}
+
+			// 	if(counter > 1) return empty[m];
+
+			// };
+		
+		console.log("after 4");
+
+		// // 5 center is free
+			for(var m in empty){
+				if(empty[m][0] == 1 && empty[m][1] == 1) return [1,1];
+			}
+		
+		console.log("after 5");
+
+		// 6 Opposite corner
+			// corner 1 [0,0]
+			if(engine.board[0][0] == plValue && engine.board[2][2] == 0) return [2,2];
+			// corner 2 [0,2]
+			if(engine.board[0][2] == plValue && engine.board[2][0] == 0) return [2,0];
+			// corner 3 [2,0]
+			if(engine.board[2][0] == plValue && engine.board[0][2] == 0) return [0,2];
+			// corner 4 [2,2]
+			if(engine.board[2][2] == plValue && engine.board[0][0] == 0) return [0,0];
+
+		console.log("after 6");	
+
+		// two opposite corners ocuppied
+
+			// corner 1 [0,0] and 4 [2,2]
+			if(engine.board[2][2] == plValue && engine.board[0][0] == plValue) {
+
+				// side 1 [0,1] free
+				if(engine.board[0][1] == 0) return [0,1];
+				// side 2 [1,2] free
+				if(engine.board[1][2] == 0) return [1,2];
+				// side 3 [2,1] free
+				if(engine.board[2][1] == 0) return [2,1];
+				// side 4 [1,0] free
+				if(engine.board[1][0] == 0) return [1,0];
+
+			}
+
+			// corner 2 [0,2] and 3 [2,0]
+			if(engine.board[0][2] == plValue && engine.board[2][0] == plValue) {
+
+				// side 1 [0,1] free
+				if(engine.board[0][1] == 0) return [0,1];
+				// side 2 [1,2] free
+				if(engine.board[1][2] == 0) return [1,2];
+				// side 3 [2,1] free
+				if(engine.board[2][1] == 0) return [2,1];
+				// side 4 [1,0] free
+				if(engine.board[1][0] == 0) return [1,0];
+
+			}
+		console.log(engine.board[0][2] == plValue);
+		console.log(engine.board[2][0] == plValue);
+		console.log("after opposite side");
+		// 7 empty corner
+			// corner 1 [0,0]
+			if(engine.board[0][0] == 0) return [0,0];
+			// corner 2 [0,2]
+			if(engine.board[0][2] == 0) return [0,2];
+			// corner 3 [2,0]
+			if(engine.board[2][0] == 0) return [2,0];
+			// corner 4 [2,2]
+			if(engine.board[2][2] == 0) return [2,2];
+
+		console.log("after 7");
+		// 8 empty side
+			// side 1 [0,1]
+			if(engine.board[0][1] == 0) return [0,1];
+			// side 2 [1,0]
+			if(engine.board[1][0] == 0) return [1,0];
+			// side 3 [1,2]
+			if(engine.board[1][2] == 0) return [1,2];
+			// side 4 [2,1]
+			if(engine.board[2][1] == 0) return [2,1];
+
+		console.log("after 8");
+		// if everything else fails...
+		return empty[0];
 
 	}
 
+
 };
-
-
-
-
-
-display.setInitialState();
