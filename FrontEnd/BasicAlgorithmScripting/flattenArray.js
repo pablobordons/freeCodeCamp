@@ -10,3 +10,14 @@ function flattenArray(arr){
     },[]); 
     
 }
+
+
+/*  Shorter version */
+/*(Pablo Macías from Gitter)*/
+
+
+function steamroller(arr){
+  return arr.reduce((ant, act) => {
+    return Array.isArray(act) ? ant.concat(steamroller(act)) : ant.concat(act);
+  }, []);
+}
