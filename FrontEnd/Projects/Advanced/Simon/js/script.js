@@ -13,6 +13,16 @@
 // if start is pressed reset
 
 
+/*
+
+Still need to work on:
+
+bug haunting
+
+1- hard reset nor working
+
+*/
+
 var simon = {
 
 
