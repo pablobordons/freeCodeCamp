@@ -19,7 +19,9 @@ Still need to work on:
 
 bug haunting
 
-1- hard reset nor working
+1- hard reset not working
+
+2- spiral overlap each other
 
 */
 
